@@ -76,4 +76,26 @@ TO-DELETE-NODEGROUP: eksctl delete nodegroup --cluster mycluster --name my-node-
 
 We can delete the nodegroups by using option: --force, If it was not supported we can use option: --disable-eviction
 
+2. How can you create a cluster and NodeGroup at once ?
+
+We can create both cluster and nodegroup at once, but you do not need to specify the cluster name or region again for the node group,
+because you're creating both together, and eksctl already has that context.
+
+Command: 
+
+eksctl create cluster \
+--name mycluster \
+--region ap-south-1 \
+--zones ap-south-1a,ap-south-1b,ap-south-1c \
+--version 1.23 \
+--nodegroup-name my-node-group \
+--nodes 3 \
+--node-type t2.micro \
+--nodes-min 2 \
+--nodes-max 3 \
+--managed
+
+
+
+
 
