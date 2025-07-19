@@ -50,6 +50,7 @@ eksctl create cluster \ #When u skipped this "\" it will ignore or skip the cert
   --zones ap-south-1a,ap-south-1b,ap-south-1c \
   --without-nodegroup       # This will not create a NodGroup, It Just Creates a Cluster
 
+
 eksctl utils associate-iam-oidc-provider \ #Optional It was already linked with IAM role.
   --region ap-south-1 \
   --cluster mycluster \
@@ -66,4 +67,7 @@ eksctl create nodegroup \
   --ssh-access \
   --ssh-public-key <your-key-name> \ #This will enable SSH access to the EKS worker nodes (EC2 instances in the node group)..
   --managed
+
+TO-DELETE-CLUSTER: eksctl delete cluster --cluster mycluster --region ap-south-1
+TO-DELETE-NODEGROUP: eksctl delete nodegroup --cluster mycluster --name my-node-group
 
