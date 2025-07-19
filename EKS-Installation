@@ -43,7 +43,7 @@ We can create cluster with help of commands, We can define the Node Group while 
 
 Without NodeGroup :
 
-eksctl create cluster \
+eksctl create cluster \ #When u skipped this "\" it will ignore or skip the certain flags and created with default ones.
   --name mycluster \
   --version 1.28 \
   --region ap-south-1 \
