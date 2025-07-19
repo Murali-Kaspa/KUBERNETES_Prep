@@ -1,0 +1,69 @@
+1. Create an IAM Role
+
+Go to IAM > Roles > Create Role
+Choose EC2 as the trusted entity
+Attach these policies: AmazonEKSClusterPolicy, AmazonEKSWorkerNodePolicy, AmazonEC2ContainerRegistryReadOnly OR simply use AdministratorAccess if you're just testing.
+
+2. Launch Ubuntu EC2
+Amazon Linux or Ubuntu instance (e.g., t3.medium)
+Attach the IAM Role created above
+Ensure port 22 is open in Security Group for SSH
+
+3. SSH into the EC2 and install prerequisites
+
+Install AWS CLI v2
+sudo apt update
+sudo apt install unzip -y
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws --version
+
+Install eksctl
+
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+
+Install kubectl
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+Configure AWS CLI
+aws configure
+# Enter: Access Key, Secret Key, Region (e.g., ap-south-1), output format (json)
+
+
+Creating Cluster..?
+
+We can create cluster with help of commands, We can define the Node Group while creating the cluster
+
+Without NodeGroup :
+
+eksctl create cluster \
+  --name mycluster \
+  --version 1.28 \
+  --region ap-south-1 \
+  --zones ap-south-1a,ap-south-1b,ap-south-1c \
+  --without-nodegroup       # This will not create a NodGroup, It Just Creates a Cluster
+
+eksctl utils associate-iam-oidc-provider \ #Optional It was already linked with IAM role.
+  --region ap-south-1 \
+  --cluster mycluster \
+  --approve
+
+eksctl create nodegroup \
+  --cluster mycluster \
+  --name my-nodegroup \
+  --node-type t3.medium \
+  --nodes 2 \
+  --nodes-min 1 \
+  --nodes-max 3 \
+  --region ap-south-1 \
+  --ssh-access \
+  --ssh-public-key <your-key-name> \ #This will enable SSH access to the EKS worker nodes (EC2 instances in the node group)..
+  --managed
+
