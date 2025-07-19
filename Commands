@@ -1,0 +1,88 @@
+eksctl create cluster	  # Create a new EKS cluster
+eksctl delete cluster	  # Delete an existing EKS cluster
+eksctl get cluster	    # List all clusters
+eksctl update cluster	  # Update EKS cluster settings (e.g., Kubernetes version)
+eksctl upgrade cluster	# Upgrade the Kubernetes control plane
+eksctl utils describe-stacks	# View CloudFormation stack details used by eksctl
+eksctl utils associate-iam-oidc-provider	# Enable OIDC provider for IRSA
+eksctl utils write-kubeconfig	# Write kubeconfig file to access cluster
+
+
+NODEGROUPS:
+
+eksctl create nodegroup    # Create a managed or unmanaged node group
+eksctl delete nodegroup    # Delete a node group
+eksctl get nodegroup       # List node groups in a cluster          
+eksctl scale nodegroup     # Change the number of nodes                  
+eksctl upgrade nodegroup   # Upgrade the Kubernetes version of a node group
+
+IAM:
+
+eksctl create iamserviceaccount           # Create a Kubernetes service account with IAM role 
+eksctl delete iamserviceaccount           # Delete the IAM service account                    
+eksctl get iamserviceaccount              # List IAM service accounts                         
+eksctl utils associate-iam-oidc-provider  # Link OIDC provider to the cluster (for IRSA) 
+
+KUBERNETES COMMANDS:
+
+kubectl version                       # Show client/server version              
+kubectl cluster-info                  # Show cluster info                       
+kubectl get all                       # Show all resources in default namespace 
+kubectl get nodes                     # List all nodes                          
+kubectl get namespaces                # List namespaces                         
+kubectl config get-contexts           # Show kubeconfig contexts                
+kubectl config use-context <name>     # Switch context                          
+
+
+POD COMMANDS :
+
+kubectl run mypod --image=nginx	     # Create a pod with nginx image
+kubectl get pods	                   # List all pods
+kubectl describe pod <name>	         # Show pod details
+kubectl delete pod <name>	           # Delete a pod
+kubectl logs <pod-name>	             # Show logs of a pod
+kubectl logs -f <pod-name>           # To check the logs in real-time
+kubectl exec -it <pod-name> -- bash  # Access shell inside a pod
+
+REPLICASET COMMANDS :
+
+kubectl get rs                # List ReplicaSets        
+kubectl describe rs <name>    # Show ReplicaSet details 
+
+DEPLOYMNET COMMANDS :
+
+kubectl create deployment myapp --image=nginx  # Create deployment
+kubectl get deployments                        # List deployments 
+kubectl scale deployment myapp --replicas=3    # Scale replicas
+kubectl rollout restart deployment myapp       # Restart deployment
+kubectl delete deployment myapp                # Delete deployment
+
+
+SERVICE COMMANDS :
+
+kubectl expose pod mypod --port=80 --type=NodePort  # Create service       
+kubectl get svc                                     # List services        
+kubectl describe svc <name>                         # Show service details 
+kubectl delete svc <name>                           # Delete service       
+
+CONFIGMAP COMMANDS :
+
+kubectl create configmap myconfig --from-literal=env=prod  # Create configmap
+kubectl get configmap                                      # List configmaps
+kubectl describe configmap myconfig                        # Show details    
+kubectl delete configmap myconfig                          # Delete it
+
+NAMESPACE COMMANDS :
+
+kubectl create ns dev    # Create namespace        
+kubectl get ns           # List namespaces         
+kubectl delete ns dev    # Delete namespace        
+kubectl get pods -n dev  # Get pods in a namespace 
+
+
+kubectl get pod <podname> -o yaml # To get the POD information in YAML format, if you want it in JSON u can just replace YAML with JSON.
+
+kubectl scale rs <ReplicaSet Name> --replicas=10 # It will scale the Pods to 10.
+
+Note: If you scale up the pods by using the above command, then we apply the rs file then it comes to that original replicas count.
+
