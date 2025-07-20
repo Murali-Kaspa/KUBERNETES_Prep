@@ -1,0 +1,22 @@
+apiVersion: apps/v1 
+kind: ReplicaSet
+metadata:
+  name: myrs
+  labels:
+    app: projectA
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: projectA
+  template:
+    metadata:
+      name: myrspod
+      labels:
+        app: projectA
+    spec:
+      containers:
+        - name: myrsimage
+          image: nginx
+          ports:
+            - containerPort: 8080
