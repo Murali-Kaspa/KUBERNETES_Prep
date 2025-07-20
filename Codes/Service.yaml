@@ -5,10 +5,10 @@ metadata:
   labels:
     app: projectA
 spec:
-  type: NodePort 
+  type: NodePort # We can change it for different services lik ClusterIP / LoadBalancer
   selector:
     app: projectA 
   ports: 
     - port: 80
       targetPort: 80
-      nodePort: 30012
+      nodePort: 30012 # Should be in between 30000 – 32767
