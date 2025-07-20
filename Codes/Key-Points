@@ -1,1 +1,30 @@
-Hey Hello, let's add some KeyPoints here in future
+1. Understanding the Logic of HPA.
+
+resources:
+  limits:
+    cpu: "256m"
+    memory: "256Mi"
+  requests:
+    cpu: "200m"
+    memory: "128Mi"
+
+ - Question 1: What Happens if your cpu > 256m and the memory is < 256mi ?
+
+So here the CPU utilisation is crossed it's threshold, the container may throttled so it slowdown the container but container was not deleted.
+If we enable the HPA then a new container will be created and yes we have the old container as well, but it is slow. 
+
+- Question 2: What Happens if your cpu < 256m and the memory is > 256mi ?
+
+So as the POD memory is Full, it goes to OutOfMemory ERROR (CrashLoopBackOff may appear), So it deletes the pod and restarts the same pod. 
+In this case it will not scale out it just restarts the same pod.
+
+- Question 3: What is the purpose of requests ?
+
+When HPA creates a new Pod, the Kubernetes Scheduler ensures that the target node has at least 200m CPU and 128Mi memory available, 
+based on the Pod’s requests.
+
+- Question 4: If you have 3 replicas and all are out of memory and CPU is beyond threshold, So is application accessible ?
+
+No, As the PODS are continously killed and restared the same pods, the application will be un-available and it throws error like :502 (Bad Gateway) or 503 (Service Unavailable).
+we have to manulayy increase the memory limit or enable vertical Pod scaling.
+
