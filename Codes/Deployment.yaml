@@ -1,0 +1,26 @@
+# Deployment is same as Replicaset, we have to change the Kind field only.
+# In real-world DevOps projects, we use Deployments for flexibility, updates, and rollback support
+# ReplicaSet is mostly managed internally by Deployment in modern Kubernetes workflows.
+
+apiVersion: apps/v1 
+kind: Deployment  #ReplicaSet also works
+metadata:
+  name: mydeployment
+  labels:
+    app: projectA
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: projectA
+  template:
+    metadata:
+      name: myrspod
+      labels:
+        app: projectA
+    spec:
+      containers:
+        - name: myrsimage
+          image: nginx
+          ports:
+            - containerPort: 8080
