@@ -1,0 +1,39 @@
+# HPA (Horizaontal Pod Scaling)
+# this is also deployment code we have to resources block only at the end.
+# Once it done we have to enable HPS by running below command.
+
+#kubectl autoscale deployment mydeployment --cpu-percent 50 --min 3 --max 10
+
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: mydeployment
+  labels: 
+    app: front-end
+    name: projectA
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: projectA
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: front-end
+        name: projectA
+    spec:
+      containers:
+        - name: nginximage
+          image: nginx
+          ports:
+            - containerPort: 80 
+          resources:
+            limits:   # Max CPU/memory a container can use.
+              cpu: "500m"
+              memory: "256Mi"
+            requests: # Minimum CPU/memory guaranteed
+              cpu: "200m"
+              memory: "128Mi"
+
+
