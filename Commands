@@ -86,5 +86,8 @@ kubectl scale rs <ReplicaSet Name> --replicas=10 # It will scale the Pods to 10.
 
 Note: If you scale up the pods by using the above command, then we apply the rs file then it comes to that original replicas count.
 
+
 kubectl autoscale deployment  <deployment-name> --cpu-percent 50 --max 10 --min 3  #This is for HPA (Horizontal Pod Autoscaller)
+kubectl delete hpa <deployment-name> # It deletes the HPA 
+
 
