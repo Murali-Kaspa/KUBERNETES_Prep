@@ -40,6 +40,7 @@ kubectl run mypod --image=nginx	     # Create a pod with nginx image
 kubectl get pods	                   # List all pods
 kubectl get pods --show-labels       # It will display the pods along with it's labels 
 kubectl get pods -l env=dev          # It will display all the PODS which are under dev label.
+kubectl get pods -l env!=dev         # It will display all the PODS except the Dev tagged pods.
 kubectl describe pod <name>	         # Show pod details
 kubectl delete pod <name>	           # Delete a pod
 kubectl logs <pod-name>	             # Show logs of a pod
