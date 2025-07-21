@@ -28,3 +28,20 @@ based on the Pod’s requests.
 No, As the PODS are continously killed and restared the same pods, the application will be un-available and it throws error like :502 (Bad Gateway) or 503 (Service Unavailable).
 we have to manulayy increase the memory limit or enable vertical Pod scaling.
 
+
+
+2. Understanding of ReplicaSet 
+
+- Question 1: You deployed an application in Kubernetes using a ReplicaSet. After a month, 
+              you updated the version from v1 to v2. Will the ReplicaSet create new Pods automatically ?
+
+No, a ReplicaSet will not automatically create new Pods if you update the version (e.g., change the container image from v1 to v2) and run kubectl apply.
+Reason: ReplicaSet does not detect changes in the Pod template (like image version). 
+It only ensures that the specified number of Pods are running — it does not manage rolling updates.
+
+You can upgrade the pods from V1 to V2, By Deleting the pods and recreate (or) scale down and scale up. During this process it deletes the pods and creates a new pods.
+So all new pods will create with V2 version.
+
+
+
+
