@@ -30,7 +30,7 @@ we have to manulayy increase the memory limit or enable vertical Pod scaling.
 
 
 
-2. Understanding of ReplicaSet 
+2. Understanding of ReplicaSet / Deployments ?
 
 - Question 1: You deployed an application in Kubernetes using a ReplicaSet. After a month, 
               you updated the version from v1 to v2. Will the ReplicaSet create new Pods automatically ?
@@ -43,5 +43,9 @@ You can upgrade the pods from V1 to V2, By Deleting the pods and recreate (or) s
 So all new pods will create with V2 version.
 
 
+- Question 2: You deployed an application in Kubernetes using a Deployment. After a month, 
+              you updated the version from v1 to v2. Will the Deployment create new Pods automatically ?
 
+When using a Deployment, if you update the container image (e.g., from v1 to v2) and run kubectl apply,
+Kubernetes automatically creates a new ReplicaSet, starts a rolling update, creates new Pods with v2, and gradually deletes the old Pods with v1.
 
