@@ -61,6 +61,7 @@ kubectl get deployments                        # List deployments
 kubectl scale deployment myapp --replicas=3    # Scale replicas
 kubectl rollout restart deployment myapp       # Restart deployment
 kubectl delete deployment myapp                # Delete deployment
+kubectl rollout undo deployment <deploymentname>  # RollBacking The Deployment
 
 
 SERVICE COMMANDS :
