@@ -66,6 +66,7 @@ kubectl rollout undo deployment <deploymentname>  # RollBacking The Deployment
 
 SERVICE COMMANDS :
 
+kubectl create svc nodeport/clusterip myservice --tcp 80:80    # Creates a Service.., We cnnot create LoadBalance by using this, we have to write manifest file.
 kubectl expose pod mypod --port=80 --type=NodePort  # Create service       
 kubectl get svc                                     # List services        
 kubectl describe svc <name>                         # Show service details 
