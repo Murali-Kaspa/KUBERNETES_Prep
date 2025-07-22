@@ -86,6 +86,13 @@ kubectl delete ns dev    # Delete namespace
 kubectl get pods -n dev  # Get pods in a namespace 
 
 
+PRIORITY CLASS: #HighPriority = #HighChances
+
+kubectl create priorityclass high-priority --value=1000000 --description="high-priority"  # Creates a Priority Class for that Pods
+kubctl get priorityclasses   # To list the PriorityClasses
+kubectl describe priorityclass high-priority # To get the info of priorityclass
+
+
 kubectl get pod <podname> -o yaml # To get the POD information in YAML format, if you want it in JSON u can just replace YAML with JSON.
 
 kubectl scale rs <ReplicaSet Name> --replicas=10 # It will scale the Pods to 10.
