@@ -1,4 +1,14 @@
-1. Understanding the Logic of HPA.
+1. What is INIT Container ? 
+
+An Init Container is a special type of container that runs before the main container in a Pod.
+It ensures that all the required setup or dependencies are ready (like downloading files, checking services, etc.) 
+before the main application starts.
+
+It runs only once per Pod — at Pod creation. If POD restarts it will not run INIT Again.
+If an Init Container fails, the kubelet keeps restarting it until it succeeds.
+
+
+2. Understanding the Logic of HPA.
 
 resources:
   limits:
@@ -30,7 +40,7 @@ we have to manulayy increase the memory limit or enable vertical Pod scaling.
 
 
 
-2. Understanding of ReplicaSet / Deployments ?
+3. Understanding of ReplicaSet / Deployments ?
 
 - Question 1: You deployed an application in Kubernetes using a ReplicaSet. After a month, 
               you updated the version from v1 to v2. Will the ReplicaSet create new Pods automatically ?
@@ -48,4 +58,5 @@ So all new pods will create with V2 version.
 
 When using a Deployment, if you update the container image (e.g., from v1 to v2) and run kubectl apply,
 Kubernetes automatically creates a new ReplicaSet, starts a rolling update, creates new Pods with v2, and gradually deletes the old Pods with v1.
+
 
