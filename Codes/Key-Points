@@ -7,6 +7,13 @@ before the main application starts.
 It runs only once per Pod — at Pod creation. If POD restarts it will not run INIT Again.
 If an Init Container fails, the kubelet keeps restarting it until it succeeds.
 
+NOTE: The init container will start runs once the pod created, But the main container will run once the init container success
+
+      Pod is created → Init container runs → If success → Main container runs 
+Else: 
+
+ERROR: INIT: Error ( k get pods)
+
 
 2. Understanding the Logic of HPA.
 
