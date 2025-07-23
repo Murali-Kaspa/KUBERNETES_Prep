@@ -1,0 +1,60 @@
+1. What is Worker Nodes ?
+
+A:  The Worked nodes are the servers (Vm's or Physical machines), Here the actual work done. it follow the instrcutions given by the master node.  
+    These nodes host the pods that contain your containers.
+
+2. What is Priority Class ? 
+
+A:  PriorityClass tells Kubernetes which Pods are more important, but not where they should run.
+    ex: if you have less CPU it will run only one POD, But the requirment is to run 3 PODs, So here priority comes the high priority POD will execute first and other goes to pending state.
+
+3. What is DaemonSet in Nodes and why it is used ? 
+
+A:  A DaemonSet creates one Pod per node, typically used to monitor, collect logs, or manage security on all Worker Nodes.
+    This POD is independent. Whenever a new Node is created This DaemonSet will create a new POD in that node.
+    This ensures that each node has a POD that will track those changes and send it to Control Plane.
+
+4. What is NodeAffinity ? 
+
+A:  It is similar to the NodeSelector Concept with more features, like it supports multiple Operators like : IN, NotIn, Exists, DoesNotExist, Gt & Lt.
+
+
+
+######################
+SCENARIO QUESTIONS: 
+######################
+
+1. You have two worker nodes A and B, each node runs multiple pods and the CPU is reached it's peak value in both Nodes,
+   So A new pod need to be deployed so you create a new NODE-C, So what happens to the old pods ?
+
+A:  As Both nodes are full and a new node is created (Node-C), The new POD will be deployed in Node-C only, as it have the free CPU and Memory, 
+    But the Exisiting pods in NODE-A,B are still running in the Same nodes. Kubernetes does not move existing Pods automatically to the new node.
+    If u want to run it on the Node-C, you can delete some pods in nodes A nd B, So mostly it will create in Node-C.
+
+
+2. What happens if your Worker Nodes are full, and a new POD is created ? 
+
+A:  If you have a Worker Node and the CPU is full, Then the new PODS will not be created it is going to Pending state until it has free CPU.
+
+
+3. I have 3 Applications to be deployed (micro,medium,large) and the worker nodes i have are (micro,medium,large),
+   So how kubernetes know which pod deployed in which node based on their size ?
+
+A:  In real cases we have worker nodes with diff diff sizes based on usage. 
+    Testing Node has less CPU
+    Production Node has more CPU.
+    
+    So, In this case we use NODE SELECTOR option. It is a mechanism used to control the placement of PODS onto specific nodes within a cluster. 
+    we can attach appopriate labels to the pods, and in the POD specification file u can define a NodeSelector to match the desired labels.
+
+    Labelling the nodes :         kubectl label node node-micro size=micro
+                                  kubectl label node node-medium size=medium
+                                  kubectl label node node-large size=large
+       ex:   spec:
+               containers:
+                 - name: mypod
+                   image: nginx
+                 nodeSelector:
+                   size: large
+
+
