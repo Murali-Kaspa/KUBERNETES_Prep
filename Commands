@@ -49,6 +49,17 @@ kubectl logs <pod-name>	             # Show logs of a pod
 kubectl logs -f <pod-name>           # To check the logs in real-time
 kubectl exec -it <pod-name> -- bash  # Access shell inside a pod
 
+
+DEBUGGING: 
+
+For Collecting Metrics we have to install Metrics Server in our Cluster, Else it throws error.
+
+kubectl get pods --all-namespaces (OR) kubectl get po -A # Display all the PODS in All NameSpaces.
+kubectl top pods    # Shows the Memoery and CPU of the POD.
+kubectl top pods -A # Shows the Memory and CPU of Pods in all Namespaces.
+kubectl top pods --all-namespaces # Displays CPU and memory usage of each Node.
+
+
 REPLICASET COMMANDS :
 
 kubectl get rs                # List ReplicaSets        
