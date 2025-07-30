@@ -68,7 +68,7 @@ eksctl create nodegroup \
   --ssh-public-key <your-key-name> \ #This will enable SSH access to the EKS worker nodes (EC2 instances in the node group)..
   --managed
 
-TO-DELETE-CLUSTER: eksctl delete cluster --cluster mycluster --region ap-south-1  # We can also delete it by using Multiline Commands as above.
+TO-DELETE-CLUSTER: eksctl delete cluster --name CampImageCluster --region ap-south-1 # We can also delete it by using Multiline Commands as above.
 TO-DELETE-NODEGROUP: eksctl delete nodegroup --cluster mycluster --name my-node-group
 
 
