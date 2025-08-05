@@ -1,0 +1,95 @@
+Question-1: What is Blue-Green Deployment?
+
+Blue-Green Deployment is a technique where:
+You run two identical environments (Blue = current, Green = new).
+Users are served by the Blue environment (v1).
+You deploy the new version to Green (v2), test it.
+If everything is fine, you switch traffic from Blue to Green — instantly and safely.
+we have to create a service file to expose the traffic.
+
+1. Blue Deployment (Live / Stable):
+
+v1 is deployed as blue-deployment and receiving traffic.
+It’s connected to a Service named myapp-service.
+
+# blue-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v1
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:v1
+        ports:
+        - containerPort: 80
+
+
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  selector:
+    app: myapp
+    version: v1   # Points to Blue (v1)
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+Green deployment u have to deploy it separetly .
+
+# green-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v2
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:v2
+        ports:
+        - containerPort: 80
+        
+Test Green (v2):
+It’s deployed but not receiving production traffic yet.
+You can exec into the pod, check logs, test APIs directly. If all good u can switch the traffic from blue to green.
+
+Switch Traffic from Blue → Green
+To switch users to the new version (Green), update the Service selector:
+
+kubectl patch service myapp-service -p '{"spec":{"selector":{"app":"myapp","version":"v2"}}}'
+
+This now routes traffic to the green deployment (v2).
+
+
+If Green is stable, delete Blue:
+kubectl delete deployment blue-deployment
+Or keep Blue temporarily in case you need to roll back.
+
+
+
