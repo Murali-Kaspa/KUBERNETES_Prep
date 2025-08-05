@@ -1,0 +1,57 @@
+
+Question-1 : How to watch the pods creation and what is logic for creating terminating pods in rollinf deployment ?
+
+Rolling deployments update pods incrementally with ZERO DOWNTIME by gradually replacing old replicas with new ones.
+
+we can watch the pods status by using : kubectl get pods -l app=myapp --watch
+
+in our code we set conditions for maxUnavailable and mazSurge to 1.
+
+MaxUnavailable : Only one pod will be unavaibale during the deployment.
+MaxSurge: Only One pod wil create at a time.
+
+
+| Step | Running Pods  | Action                                 
+
+| 0    | 3 old pods    | Initial state                          |
+| 1    | 3 old + 1 new | New pod added (surge)                  |
+| 2    | 2 old + 1 new | One old pod removed (unavailable = 1)  |
+| 3    | 2 new + 1 old | Another new pod added, old one removed |
+| 4    | 3 new pods    | All updated, rollout complete          |
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rolling-deployment
+  labels:
+    app: myapp
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:                             
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      # priorityClassName: high-priority
+      containers:
+      - name: myapp-container            
+        image: nginx:1.21                 
+        ports:
+        - containerPort: 80              
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
