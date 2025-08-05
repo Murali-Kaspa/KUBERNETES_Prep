@@ -1,0 +1,40 @@
+Question-1:  Create a Recreate Deployment Model ?
+
+You can run this file by using kubectl apply -f <deployment.yaml>, and check the pods, But if u want to rollback or revert changes, you can use below commands.
+
+kubectl rollout undo deployment <deployment-name>  #this used to revert the changes.
+
+If you want to rollback to specific versions
+kubectl rollout history deployment <deployment-name>
+kubectl rollout undo deployment <deployment-name> --to-revision=<revision-number>
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recreate-deployment
+spec:
+  strategy:
+    type: Recreate
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      # priorityClassName: high-priority  # Optional, define it first if using
+      containers:
+        - name: myapp-container           # Provide a valid container name
+          image: nginx:latest             # Replace with actual image
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
