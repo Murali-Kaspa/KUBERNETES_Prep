@@ -1,0 +1,96 @@
+Question-1 : What is Canary Deployment?
+
+A Canary deployment gradually rolls out a new version (v2) of your app alongside the old version (v1), serving both, 
+and monitoring the behavior of the new version before a full rollout.
+
+90% traffic goes to v1 (stable)
+10% traffic goes to v2 (canary)
+Monitor the new version (v2)
+If successful ➜ promote v2 to 100%
+If not ➜ rollback by removing v2
+
+NOTE: Kubernetes does not natively support traffic-splitting like canary out of the box, u have to create two manifest files for deploymnets or use ArgoCD.
+
+Question-2 : Why no strategy block in Canary simialr to rolling update?
+
+Because you are not updating an existing Deployment. You are Creating a new Deployment (v2) with fewer replicas
+Leaving the old Deployment (v1) as it is
+Managing traffic between them (optionally via Service or Ingress or Service Mesh)
+
+So there's no need for a strategy field unless you plan to update that Deployment again.
+
+
+
+# stable-deployment.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v1
+    spec:
+      priorityClassName: medium-priority
+      containers:
+        - name: myapp-container
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+---
+# canary-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v2
+    spec:
+      priorityClassName: high-priority
+      containers:
+        - name: myapp-container
+          image: nginx:1.22
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
+kubectl apply -f stable-deployment.yaml
+kubectl apply -f canary-deployment.yaml
+
+Behaviour: 
+
+So lets assume V1 is existing and running with 10 pods and V2 is running with 1 pod. 
+We can check the performance and issues of V2, if performs well, we can scale up the V2 to 10 pods and scale down V1 to 0 pods.
+
+If Canary Fails (V2 has issues)
+Simply delete or scale down the canary:
+kubectl delete -f canary-deployment.yaml
