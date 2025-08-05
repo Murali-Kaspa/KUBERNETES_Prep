@@ -65,3 +65,51 @@ So all new pods will create with V2 version.
 
 When using a Deployment, if you update the container image (e.g., from v1 to v2) and run kubectl apply,
 Kubernetes automatically creates a new ReplicaSet, starts a rolling update, creates new Pods with v2, and gradually deletes the old Pods with v1.
+
+
+4. What is CrashLoopBackOff Error ? What are the reasons for this error ?
+
+A: CrashLoopBackOff error means a Pod is Crashing and Restarting continously.
+   The container in the pod started → crashed → restarted → crashed again... so Kubernetes is slowing down restarts.
+
+   Some of the reasons are Application Bugs, Network Issues, OutofMemory, Secrets/configs not found, Liveness probe failure
+   Dependency service not ready EX: The app fails because it depends on another service (e.g., database) that isn’t running yet.
+
+5. What is a Liveness Probe in Kubernetes?
+
+A: A liveness probe is a health check that Kubernetes uses to determine if a container is still alive (healthy).
+   If a liveness probe fails, Kubernetes assumes:
+   “This container is broken and cannot recover on its own, so I need to kill and restart it.
+
+6. What is a Liveness Probe Failure in Kubernetes?
+
+A: A liveness probe failure in k8 means your pod failed the liveness check, and Kubernetes restarts the container. 
+   If this failure happens repeatedly, the pod may go into a  CrashLoopBackOff Stage.
+
+7. What is Static Pod ?
+
+A: A static pod is a pod that is directly created and managed by the kubelet on a specific node,
+   — without using kubectl apply or the Kubernetes control plane. BUT in EKS we don't have static pods.
+
+8. What is a Pod Disruption Budget (PDB) in Kubernetes?
+
+A: A Pod Disruption Budget (PDB) in Kubernetes is a policy used to ensure high availability of applications 
+   during voluntary disruptions like node draining, upgrades, or maintenance.
+
+Example:
+        Suppose your application runs with 5 replicas. If someone performs a node drain or upgrade, 
+        and all pods are on that node, they might get evicted, causing downtime.
+
+        To prevent this, we create a PDB to tell Kubernetes: “Don’t evict more than a certain number of pods at once.”
+
+        You can define:
+                minAvailable: Minimum number of pods that must remain running
+                maxUnavailable: Maximum number of pods that can be unavailable at a time
+
+        PDB is attached using label selectors to target the relevant pods.
+        This ensures that not all pods go down at the same time, keeping the application available during disruptions.
+
+9. What is POD Priority ?
+
+A: Pod Priority is used to assign importance to pods. High-priority pods are scheduled and kept running before low-priority ones. 
+   When the cluster faces resource pressure, Kubernetes may evict low-priority pods to make room for newly scheduled high-priority pods.
