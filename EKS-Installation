@@ -45,7 +45,7 @@ Without NodeGroup :
 
 eksctl create cluster \ #When u skipped this "\" it will ignore or skip the certain flags and created with default ones.
   --name mycluster \
-  --version 1.28 \
+  --version 1.30 \
   --region ap-south-1 \
   --zones ap-south-1a,ap-south-1b,ap-south-1c \
   --without-nodegroup       # This will not create a NodGroup, It Just Creates a Cluster
@@ -87,7 +87,7 @@ eksctl create cluster \
 --name mycluster \
 --region ap-south-1 \
 --zones ap-south-1a,ap-south-1b,ap-south-1c \
---version 1.23 \
+--version 1.30 \
 --nodegroup-name my-node-group \
 --nodes 3 \
 --node-type t2.micro \
