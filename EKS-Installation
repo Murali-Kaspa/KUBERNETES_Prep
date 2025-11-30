@@ -90,7 +90,7 @@ eksctl create cluster \
 --version 1.30 \
 --nodegroup-name my-node-group \
 --nodes 3 \
---node-type t2.micro \
+--node-type t2.medium \
 --nodes-min 2 \
 --nodes-max 3 \
 --managed
