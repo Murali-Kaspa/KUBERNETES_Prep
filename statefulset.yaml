@@ -1,4 +1,4 @@
-StatefulSet:
+a.yaml
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -61,4 +61,20 @@ spec:
     app: mydbapp
   ports:
     - port: 3306
+
+
+#ERRORS:
+
+If the Volumes are not created, so pods are also not created, so run the below command.
+
+aws eks create-addon \
+  --cluster-name <cluster-name> \
+  --addon-name aws-ebs-csi-driver
+
+then run below
+
+kubectl delete statefulset mystatefulset
+kubectl delete pvc mysqlvolume-mystatefulset-0
+kubectl apply -f a.yaml
+
 
