@@ -113,3 +113,11 @@ Example:
 
 A: Pod Priority is used to assign importance to pods. High-priority pods are scheduled and kept running before low-priority ones. 
    When the cluster faces resource pressure, Kubernetes may evict low-priority pods to make room for newly scheduled high-priority pods.
+
+10. If a Kubernetes Deployment is created with 3 replicas, and later an HPA is configured with minReplicas = 2 and maxReplicas = 5, what happens when the CPU utilization is very low?
+    Will the pods immediately reduce to 2, or will they remain 3?
+
+A:  When the Deployment is created, 3 pods are started initially.
+    After the HPA is added, it does not immediately change the pod count.
+    Since CPU usage is very low, HPA first waits for some time (scale-down stabilization period) and calculates the required replicas based on CPU metrics.
+    If the CPU remains low for some time, HPA will scale down the pods from 3 to 2, but it will never go below 2 because minReplicas is set to 2.
