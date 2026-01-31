@@ -1,0 +1,63 @@
+StatefulSet:
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mystatefulset
+  labels:
+    app: myapp
+spec:
+  serviceName: headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myc
+          image: mysql:8.3.0
+          volumeMounts:
+            - name: mydb
+              mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root@123
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -uroot
+                - -proot@123
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mydb
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+
+
+#SERVICE
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: headless
+spec:
+  clusterIP: None
+  selector:
+    app: mydbapp
+  ports:
+    - port: 3306
+
