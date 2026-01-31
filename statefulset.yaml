@@ -43,6 +43,7 @@ spec:
       spec:
         accessModes:
           - ReadWriteOnce
+        storageClassName: gp2 #u can get it from k get pvc, use storageclassname
         resources:
           requests:
             storage: 1Gi
